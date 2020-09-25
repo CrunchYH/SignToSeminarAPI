@@ -9,19 +9,24 @@ using System.Threading.Tasks;
 
 namespace SignToSeminarAPI.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class SpeakersController : ControllerBase
     {
-        // GET: api/<SpeakersController>
+        // GET: api/SpeakersController
         [HttpGet]
-        public IEnumerable<Speaker> Get()
+        public IEnumerable<string> Get()
         {
             using (var context = new SignToSeminarDBContext())
             {
-                return context.Speakers.Include(o => o.seminar).ToArray<Speaker>();
+
             }
+
+
+            return new string[] { "valueSeminar", "valueUser" };
         }
 
-        // GET api/<SpeakersController>/5
+        // GET api/SpeakersController/5
         [HttpGet("{id}")]
         public Speaker Get(int id)
         {
