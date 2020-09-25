@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30517.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignToSeminarAPI", "SignToSeminarAPI\SignToSeminarAPI.csproj", "{BDB1D8FD-93B3-4DC2-9E06-EC182E49AF55}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BDB1D8FD-93B3-4DC2-9E06-EC182E49AF55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDB1D8FD-93B3-4DC2-9E06-EC182E49AF55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDB1D8FD-93B3-4DC2-9E06-EC182E49AF55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDB1D8FD-93B3-4DC2-9E06-EC182E49AF55}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {203111DC-037B-41F1-A610-7344F2CA2B38}
+	EndGlobalSection
+EndGlobal
