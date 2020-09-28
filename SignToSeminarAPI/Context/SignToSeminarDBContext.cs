@@ -26,10 +26,10 @@ namespace SignToSeminarAPI.Context
             // Configuring the relationship using Fluent API
 
             // Configuring the one-to-one relationship between tables Car and Owner
-            modelBuilder.Entity<Speaker>()
-                .HasOne<Seminar>(o => o.seminar)
-                .WithOne(c => c.speaker)
-                .HasForeignKey<Seminar>(c => c.SeminarOfSpeakerId);
+            modelBuilder.Entity<Seminar>()
+                .HasOne<Speaker>(o => o.speaker)
+                .WithMany(c => c.seminars)
+                .HasForeignKey(c => c.SeminarOfSpeakerId);
 
             // Composite Primary Key for joining the tables Car and Day with a many-to-many relationship
             modelBuilder.Entity<DaySeminar>().HasKey(sc => new { sc.dayId, sc.seminarId });

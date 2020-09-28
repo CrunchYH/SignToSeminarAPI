@@ -10,6 +10,6 @@ namespace SignToSeminarAPI.Entities
         public int id { set; get; }
         public string name { get; set; }
 
-        public virtual Seminar seminar { get; set; }
+        public virtual ICollection<Seminar> seminars { get; set; }
     }
 }
