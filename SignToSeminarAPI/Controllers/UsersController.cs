@@ -18,7 +18,7 @@ namespace SignToSeminarAPI.Controllers
         public IEnumerable<string> Get()
         {
             using var context = new SignToSeminarDBContext();
-            var users = context.User.ToArray();
+            var users = context.Set<User>(); 
             var result = new List<string>();
 
             foreach (var user in users)
@@ -60,6 +60,13 @@ namespace SignToSeminarAPI.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            using (var context = new SignToSeminarDBContext())
+            {
+                var user = new User { id = id };
+                context.User.Attach(user);
+                context.User.Remove(user);
+                context.SaveChanges();
+            }
         }
     }
 }
