@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SignToSeminarAPI.Context;
+using SignToSeminarAPI.Entities;
 
 namespace SignToSeminarAPI.Controllers
 {
@@ -13,9 +16,11 @@ namespace SignToSeminarAPI.Controllers
     {
         // GET: api/Seminars
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Seminar> Get()
         {
-            return new string[] { "value1", "value2" };
+            using var context = new SignToSeminarDBContext();
+            var seminars =  context.Seminars.ToArray();
+            return seminars;
         }
 
         // GET: api/Seminars/5

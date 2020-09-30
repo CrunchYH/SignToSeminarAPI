@@ -15,15 +15,12 @@ namespace SignToSeminarAPI.Controllers
     {
         // GET: api/SpeakersController
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Speaker> Get()
         {
-            using (var context = new SignToSeminarDBContext())
-            {
+            using var context = new SignToSeminarDBContext();
+            var speakers = context.Speakers.Include(c => c.seminars).ToArray();
+            return speakers;
 
-            }
-
-
-            return new string[] { "valueSeminar", "valueUser" };
         }
 
         // GET api/SpeakersController/5

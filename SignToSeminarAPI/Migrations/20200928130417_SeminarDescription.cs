@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace SignToSeminarAPI.Migrations
+namespace SignToSeminarAPI.Migrations 
 {
     public partial class SeminarDescription : Migration
     {
