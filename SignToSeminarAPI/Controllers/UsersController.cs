@@ -18,12 +18,14 @@ namespace SignToSeminarAPI.Controllers
         public IEnumerable<string> Get()
         {
             using var context = new SignToSeminarDBContext();
-            var users = context.Set<User>();
+            var users = context.User.ToArray();
             var result = new List<string>();
 
             foreach (var user in users)
             {
+                result.Add(user.id.ToString());
                 result.Add(user.name);
+                result.Add(user.email);
             }
 
             return result;
