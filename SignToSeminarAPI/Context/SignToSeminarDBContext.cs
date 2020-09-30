@@ -14,6 +14,8 @@ namespace SignToSeminarAPI.Context
         public DbSet<Seminar> Seminars { set; get; }
         public DbSet<Day> Days { set; get; }
         public DbSet<DaySeminar> DaySeminars { set; get; }
+        public DbSet<User> User { get; set; }
+        public DbSet<UserSeminar> UserSeminar {get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -25,16 +27,16 @@ namespace SignToSeminarAPI.Context
         {
             // Configuring the relationship using Fluent API
 
-            // Configuring the one-to-one relationship between tables Car and Owner
+            // Configuring the one-to-many relationship between tables Seminar and Speaker
             modelBuilder.Entity<Seminar>()
                 .HasOne<Speaker>(o => o.speaker)
                 .WithMany(c => c.seminars)
                 .HasForeignKey(c => c.SeminarOfSpeakerId);
 
-            // Composite Primary Key for joining the tables Car and Day with a many-to-many relationship
+            // Composite Primary Key for joining the tables Seminar and Day with a many-to-many relationship
             modelBuilder.Entity<DaySeminar>().HasKey(sc => new { sc.dayId, sc.seminarId });
 
-            // Composite Primary Key for joining the tables Car and Day with a many-to-many relationship
+            // Composite Primary Key for joining the tables User and Seminar with a many-to-many relationship
             modelBuilder.Entity<UserSeminar>().HasKey(sc => new { sc.userId, sc.seminarId });
 
 
