@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SignToSeminarAPI.Context;
+using SignToSeminarAPI.Entities;
 
 namespace SignToSeminarAPI.Controllers
 {
@@ -15,7 +17,16 @@ namespace SignToSeminarAPI.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            using var context = new SignToSeminarDBContext();
+            var users = context.Set<User>();
+            var result = new List<string>();
+
+            foreach (var user in users)
+            {
+                result.Add(user.name);
+            }
+
+            return result;
         }
 
         // GET: api/Users/5
@@ -27,8 +38,14 @@ namespace SignToSeminarAPI.Controllers
 
         // POST: api/Users
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] UserViewModel userVM)
         {
+            using (var context = new SignToSeminarDBContext())
+            {
+                var user = new User { name = userVM.name, email = userVM.email };
+                context.User.Add(user);
+                context.SaveChanges(); 
+            }
         }
 
         // PUT: api/Users/5
