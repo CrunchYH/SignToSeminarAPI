@@ -18,6 +18,7 @@ namespace SignToSeminarAPI.Controllers
         [HttpGet]
         public IEnumerable<User> Get()
         {
+            //Bra?
             using var context = new SignToSeminarDBContext();
             var users = context.User.ToArray();
             return users;
@@ -28,7 +29,7 @@ namespace SignToSeminarAPI.Controllers
         [HttpGet("{id}")]
         public string Get(int id)
         {
-            return "value";
+            return id.ToString();
         }
 
         // POST: api/Users
