@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SignToSeminarAPI.Context;
 using SignToSeminarAPI.Entities;
 
@@ -15,18 +16,12 @@ namespace SignToSeminarAPI.Controllers
     {
         // GET: api/Users
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<User> Get()
         {
             using var context = new SignToSeminarDBContext();
-            var users = context.Set<User>();
-            var result = new List<string>();
+            var users = context.User.ToArray();
+            return users;
 
-            foreach (var user in users)
-            {
-                result.Add(user.name);
-            }
-
-            return result;
         }
 
         // GET: api/Users/5
@@ -58,6 +53,13 @@ namespace SignToSeminarAPI.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            using (var context = new SignToSeminarDBContext())
+            {
+                var user = new User { id = id };
+                context.User.Attach(user);
+                context.User.Remove(user);
+                context.SaveChanges();
+            }
         }
     }
 }
