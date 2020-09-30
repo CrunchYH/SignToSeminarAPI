@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SignToSeminarAPI.Context;
@@ -11,14 +11,16 @@ using SignToSeminarAPI.Entities;
 namespace SignToSeminarAPI.Controllers
 {
     [Route("api/[controller]")]
+    
     [ApiController]
     public class UsersController : ControllerBase
     {
+
         // GET: api/Users
         [HttpGet]
         public IEnumerable<User> Get()
         {
-            //Bra?
+            //Bra? 
             using var context = new SignToSeminarDBContext();
             var users = context.User.ToArray();
             return users;
@@ -27,9 +29,23 @@ namespace SignToSeminarAPI.Controllers
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public User Get(int id)
         {
-            return id.ToString();
+            using var context = new SignToSeminarDBContext();
+
+            //Below doesn't work, but why?
+            //var user = context.User.Where(u => u.id == id);
+
+            var users = context.User.ToArray();
+            foreach (var user in users)
+            {
+                if (user.id == id)
+                {
+                    return user;
+                }
+               
+            }
+            return null;
         }
 
         // POST: api/Users
@@ -44,11 +60,6 @@ namespace SignToSeminarAPI.Controllers
             }
         }
 
-        // PUT: api/Users/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
