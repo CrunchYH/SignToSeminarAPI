@@ -36,7 +36,7 @@ namespace SignToSeminarAPI.Controllers
         [HttpGet("{id}")]
         public Speaker Get(int id)
         {
-            var speaker = _context.Speakers.Where(o => o.id == id).FirstOrDefault();
+            var speaker = _context.Speakers.Where(o => o.id == id).Include(s => s.seminars).FirstOrDefault();
             if (speaker != null)
                 return speaker;
             else
@@ -51,7 +51,43 @@ namespace SignToSeminarAPI.Controllers
             _context.Speakers.Add(speaker);
             _context.SaveChanges();
         }
+        // PUT: api/Speakers/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutSpeaker(int id, SpeakerViewModel speakerVM)
+        {
 
+            var existingSpeaker = _context.Speakers.Where(s => s.id == id).FirstOrDefault();
+
+            if (existingSpeaker != null)
+            {
+                existingSpeaker.name = speakerVM.name;
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(existingSpeaker).State = EntityState.Modified;
+            _context.SaveChanges();
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!SpeakerExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
 
         // DELETE api/<SpeakersController>/5
         [HttpDelete("{id}")]
@@ -61,6 +97,10 @@ namespace SignToSeminarAPI.Controllers
             _context.Speakers.Attach(speaker);
             _context.Speakers.Remove(speaker);
             _context.SaveChanges();
+        }
+         private bool SpeakerExists(int id)
+        {
+            return _context.Speakers.Any(e => e.id == id);
         }
     }
 }

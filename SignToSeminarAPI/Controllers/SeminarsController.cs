@@ -59,17 +59,25 @@ namespace SignToSeminarAPI.Controllers
 
         // PUT: api/Seminars/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSeminar(int id, Seminar seminar)
+        public async Task<IActionResult> PutSeminar(int id, SeminarViewModel seminarVM)
         {
-            if (id != seminar.id)
+
+            var existingSeminar = _context.Seminars.Where(s => s.id == id).FirstOrDefault();
+
+            if (existingSeminar != null)
             {
-                return BadRequest();
+                existingSeminar.name = seminarVM.name;
+                existingSeminar.SeminarOfSpeakerId = seminarVM.SeminarOfSpeakerId;
+                existingSeminar.description = seminarVM.description;
+
             }
             else
             {
-                
+                return BadRequest();
             }
-            _context.Entry(seminar).State = EntityState.Modified;
+            
+            _context.Entry(existingSeminar).State = EntityState.Modified;
+            _context.SaveChanges();
 
             try
             {
