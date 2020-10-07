@@ -10,8 +10,8 @@ using SignToSeminarAPI.Context;
 namespace SignToSeminarAPI.Migrations
 {
     [DbContext(typeof(SignToSeminarDBContext))]
-    [Migration("20200928130417_SeminarDescription")]
-    partial class SeminarDescription
+    [Migration("20201002114007_ChangeBackSeminarFk")]
+    partial class ChangeBackSeminarFk
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -104,7 +104,7 @@ namespace SignToSeminarAPI.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("SignToSeminarAPI.Entities.UserSeminar", b =>
@@ -119,7 +119,7 @@ namespace SignToSeminarAPI.Migrations
 
                     b.HasIndex("seminarId");
 
-                    b.ToTable("UserSeminar");
+                    b.ToTable("UserSeminars");
                 });
 
             modelBuilder.Entity("SignToSeminarAPI.Entities.DaySeminar", b =>

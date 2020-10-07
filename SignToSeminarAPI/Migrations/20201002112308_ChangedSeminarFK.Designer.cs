@@ -10,8 +10,8 @@ using SignToSeminarAPI.Context;
 namespace SignToSeminarAPI.Migrations
 {
     [DbContext(typeof(SignToSeminarDBContext))]
-    [Migration("20200929150521_listing entity User")]
-    partial class listingentityUser
+    [Migration("20201002112308_ChangedSeminarFK")]
+    partial class ChangedSeminarFK
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -58,25 +58,25 @@ namespace SignToSeminarAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("SeminarOfSpeakerId")
-                        .HasColumnType("int");
-
                     b.Property<string>("description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("speakerId")
+                        .HasColumnType("int");
+
                     b.HasKey("id");
 
-                    b.HasIndex("SeminarOfSpeakerId");
+                    b.HasIndex("speakerId");
 
                     b.ToTable("Seminars");
                 });
 
             modelBuilder.Entity("SignToSeminarAPI.Entities.Speaker", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("speakerId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -84,7 +84,7 @@ namespace SignToSeminarAPI.Migrations
                     b.Property<string>("name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("id");
+                    b.HasKey("speakerId");
 
                     b.ToTable("Speakers");
                 });
@@ -104,7 +104,7 @@ namespace SignToSeminarAPI.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("SignToSeminarAPI.Entities.UserSeminar", b =>
@@ -119,7 +119,7 @@ namespace SignToSeminarAPI.Migrations
 
                     b.HasIndex("seminarId");
 
-                    b.ToTable("UserSeminar");
+                    b.ToTable("UserSeminars");
                 });
 
             modelBuilder.Entity("SignToSeminarAPI.Entities.DaySeminar", b =>
@@ -141,7 +141,7 @@ namespace SignToSeminarAPI.Migrations
                 {
                     b.HasOne("SignToSeminarAPI.Entities.Speaker", "speaker")
                         .WithMany("seminars")
-                        .HasForeignKey("SeminarOfSpeakerId")
+                        .HasForeignKey("speakerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

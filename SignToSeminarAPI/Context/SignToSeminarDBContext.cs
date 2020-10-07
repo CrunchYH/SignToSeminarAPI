@@ -14,13 +14,18 @@ namespace SignToSeminarAPI.Context
         public DbSet<Seminar> Seminars { set; get; }
         public DbSet<Day> Days { set; get; }
         public DbSet<DaySeminar> DaySeminars { set; get; }
-        public DbSet<User> User { get; set; }
-        public DbSet<UserSeminar> UserSeminar {get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserSeminar> UserSeminars {get; set; }
+
+        public SignToSeminarDBContext(DbContextOptions<SignToSeminarDBContext> options) : base(options)
+        {
+            //Test dependency injection
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // The database connection, the simple but bad way to include it
-            optionsBuilder.UseSqlServer(@"Server=localhost\SQLEXPRESS01;Database=STSDB;Trusted_Connection=True;");
+            //optionsBuilder.UseSqlServer(@"Server=localhost\SQLEXPRESS01;Database=STSDB;Trusted_Connection=True;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -29,9 +34,9 @@ namespace SignToSeminarAPI.Context
 
             // Configuring the one-to-many relationship between tables Seminar and Speaker
             modelBuilder.Entity<Seminar>()
-                .HasOne<Speaker>(o => o.speaker)
-                .WithMany(c => c.seminars)
-                .HasForeignKey(c => c.SeminarOfSpeakerId);
+                .HasOne<Speaker>(s => s.speaker)
+                .WithMany(s => s.seminars)
+                .HasForeignKey(s => s.SeminarOfSpeakerId);
 
             // Composite Primary Key for joining the tables Seminar and Day with a many-to-many relationship
             modelBuilder.Entity<DaySeminar>().HasKey(sc => new { sc.dayId, sc.seminarId });

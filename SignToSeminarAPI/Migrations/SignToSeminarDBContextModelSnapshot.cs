@@ -102,7 +102,7 @@ namespace SignToSeminarAPI.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("SignToSeminarAPI.Entities.UserSeminar", b =>
@@ -117,7 +117,7 @@ namespace SignToSeminarAPI.Migrations
 
                     b.HasIndex("seminarId");
 
-                    b.ToTable("UserSeminar");
+                    b.ToTable("UserSeminars");
                 });
 
             modelBuilder.Entity("SignToSeminarAPI.Entities.DaySeminar", b =>

@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SignToSeminarAPI.Context;
 using SignToSeminarAPI.Entities;
+using SignToSeminarAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,15 +12,22 @@ using System.Threading.Tasks;
 namespace SignToSeminarAPI.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("CORSPolicy")]
     [ApiController]
     public class SpeakersController : ControllerBase
     {
+        private readonly SignToSeminarDBContext _context;
+
+        public SpeakersController(SignToSeminarDBContext context)
+        {
+            _context = context;
+        }
+
         // GET: api/SpeakersController
         [HttpGet]
         public IEnumerable<Speaker> Get()
         {
-            using var context = new SignToSeminarDBContext();
-            var speakers = context.Speakers.Include(c => c.seminars).ToArray();
+            var speakers = _context.Speakers.Include(s => s.seminars).ToArray();
             return speakers;
 
         }
@@ -27,25 +36,20 @@ namespace SignToSeminarAPI.Controllers
         [HttpGet("{id}")]
         public Speaker Get(int id)
         {
-            using (var context = new SignToSeminarDBContext())
-            {
-                var speaker = context.Speakers.Where(o => o.id == id).FirstOrDefault();
-                if (speaker != null)
-                    return speaker;
-                else
-                    return null;
-            }
+            var speaker = _context.Speakers.Where(o => o.id == id).FirstOrDefault();
+            if (speaker != null)
+                return speaker;
+            else
+                return null;
         }
 
         // POST api/<SpeakersController>
         [HttpPost]
-        public void Post([FromBody] Speaker speaker)
+        public void Post([FromBody] SpeakerViewModel speakerVM)
         {
-            using (var context = new SignToSeminarDBContext())
-            {
-                context.Speakers.Add(speaker);
-                context.SaveChanges();
-            }
+            var speaker = new Speaker { name = speakerVM.name };
+            _context.Speakers.Add(speaker);
+            _context.SaveChanges();
         }
 
 
@@ -53,13 +57,10 @@ namespace SignToSeminarAPI.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            using (var context = new SignToSeminarDBContext())
-            {
-                var speaker = new Speaker { id = id };
-                context.Speakers.Attach(speaker);
-                context.Speakers.Remove(speaker);
-                context.SaveChanges();
-            }
+            var speaker = new Speaker { id = id };
+            _context.Speakers.Attach(speaker);
+            _context.Speakers.Remove(speaker);
+            _context.SaveChanges();
         }
     }
 }

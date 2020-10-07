@@ -10,8 +10,8 @@ using SignToSeminarAPI.Context;
 namespace SignToSeminarAPI.Migrations
 {
     [DbContext(typeof(SignToSeminarDBContext))]
-    [Migration("20200925110719_addDaySeminarEtc")]
-    partial class addDaySeminarEtc
+    [Migration("20201002104107_InitDb")]
+    partial class InitDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -61,13 +61,15 @@ namespace SignToSeminarAPI.Migrations
                     b.Property<int>("SeminarOfSpeakerId")
                         .HasColumnType("int");
 
+                    b.Property<string>("description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("id");
 
-                    b.HasIndex("SeminarOfSpeakerId")
-                        .IsUnique();
+                    b.HasIndex("SeminarOfSpeakerId");
 
                     b.ToTable("Seminars");
                 });
@@ -102,7 +104,7 @@ namespace SignToSeminarAPI.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("SignToSeminarAPI.Entities.UserSeminar", b =>
@@ -117,7 +119,7 @@ namespace SignToSeminarAPI.Migrations
 
                     b.HasIndex("seminarId");
 
-                    b.ToTable("UserSeminar");
+                    b.ToTable("UserSeminars");
                 });
 
             modelBuilder.Entity("SignToSeminarAPI.Entities.DaySeminar", b =>
@@ -138,8 +140,8 @@ namespace SignToSeminarAPI.Migrations
             modelBuilder.Entity("SignToSeminarAPI.Entities.Seminar", b =>
                 {
                     b.HasOne("SignToSeminarAPI.Entities.Speaker", "speaker")
-                        .WithOne("seminar")
-                        .HasForeignKey("SignToSeminarAPI.Entities.Seminar", "SeminarOfSpeakerId")
+                        .WithMany("seminars")
+                        .HasForeignKey("SeminarOfSpeakerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

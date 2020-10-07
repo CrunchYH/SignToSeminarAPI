@@ -11,18 +11,23 @@ using SignToSeminarAPI.Entities;
 namespace SignToSeminarAPI.Controllers
 {
     [Route("api/[controller]")]
-    
+    [EnableCors("CORSPolicy")]
     [ApiController]
     public class UsersController : ControllerBase
     {
+        private readonly SignToSeminarDBContext _context;
+
+        public UsersController(SignToSeminarDBContext context)
+        {
+            _context = context;
+        }
 
         // GET: api/Users
         [HttpGet]
         public IEnumerable<User> Get()
         {
             //Bra? 
-            using var context = new SignToSeminarDBContext();
-            var users = context.User.ToArray();
+            var users = _context.Users.ToArray();
             return users;
 
         }
@@ -31,33 +36,22 @@ namespace SignToSeminarAPI.Controllers
         [HttpGet("{id}")]
         public User Get(int id)
         {
-            using var context = new SignToSeminarDBContext();
-
-            //Below doesn't work, but why?
-            //var user = context.User.Where(u => u.id == id);
-
-            var users = context.User.ToArray();
-            foreach (var user in users)
+            var user = _context.Users.Where(u => u.id == id).FirstOrDefault();
+            if (user != null)
             {
-                if (user.id == id)
-                {
-                    return user;
-                }
-               
+                return user;
             }
-            return null;
+            else
+                return null;
         }
 
         // POST: api/Users
         [HttpPost]
         public void Post([FromBody] UserViewModel userVM)
         {
-            using (var context = new SignToSeminarDBContext())
-            {
-                var user = new User { name = userVM.name, email = userVM.email };
-                context.User.Add(user);
-                context.SaveChanges(); 
-            }
+            var user = new User { name = userVM.name, email = userVM.email };
+            _context.Users.Add(user);
+            _context.SaveChanges();
         }
 
 
@@ -65,13 +59,10 @@ namespace SignToSeminarAPI.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            using (var context = new SignToSeminarDBContext())
-            {
-                var user = new User { id = id };
-                context.User.Attach(user);
-                context.User.Remove(user);
-                context.SaveChanges();
-            }
+            var user = new User { id = id };
+            _context.Users.Attach(user);
+            _context.Users.Remove(user);
+            _context.SaveChanges();
         }
     }
 }

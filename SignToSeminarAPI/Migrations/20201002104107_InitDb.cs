@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SignToSeminarAPI.Migrations
 {
-    public partial class addDaySeminarEtc : Migration
+    public partial class InitDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -34,7 +34,7 @@ namespace SignToSeminarAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Users",
                 columns: table => new
                 {
                     id = table.Column<int>(nullable: false)
@@ -44,7 +44,7 @@ namespace SignToSeminarAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.id);
+                    table.PrimaryKey("PK_Users", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -54,6 +54,7 @@ namespace SignToSeminarAPI.Migrations
                     id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(nullable: true),
+                    description = table.Column<string>(nullable: true),
                     SeminarOfSpeakerId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -92,7 +93,7 @@ namespace SignToSeminarAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserSeminar",
+                name: "UserSeminars",
                 columns: table => new
                 {
                     seminarId = table.Column<int>(nullable: false),
@@ -100,17 +101,17 @@ namespace SignToSeminarAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserSeminar", x => new { x.userId, x.seminarId });
+                    table.PrimaryKey("PK_UserSeminars", x => new { x.userId, x.seminarId });
                     table.ForeignKey(
-                        name: "FK_UserSeminar_Seminars_seminarId",
+                        name: "FK_UserSeminars_Seminars_seminarId",
                         column: x => x.seminarId,
                         principalTable: "Seminars",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserSeminar_User_userId",
+                        name: "FK_UserSeminars_Users_userId",
                         column: x => x.userId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -123,12 +124,11 @@ namespace SignToSeminarAPI.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Seminars_SeminarOfSpeakerId",
                 table: "Seminars",
-                column: "SeminarOfSpeakerId",
-                unique: true);
+                column: "SeminarOfSpeakerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserSeminar_seminarId",
-                table: "UserSeminar",
+                name: "IX_UserSeminars_seminarId",
+                table: "UserSeminars",
                 column: "seminarId");
         }
 
@@ -138,7 +138,7 @@ namespace SignToSeminarAPI.Migrations
                 name: "DaySeminars");
 
             migrationBuilder.DropTable(
-                name: "UserSeminar");
+                name: "UserSeminars");
 
             migrationBuilder.DropTable(
                 name: "Days");
@@ -147,7 +147,7 @@ namespace SignToSeminarAPI.Migrations
                 name: "Seminars");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Speakers");

@@ -22,6 +22,6 @@ namespace SignToSeminarAPI.Entities
 
         public IList<DaySeminar> daySeminars { get; set; }
 
-        public IList<UserSeminar> userSeminars { get; set; }
+        public IList<UserSeminar> userSeminars { get; set; } 
     }
 }
