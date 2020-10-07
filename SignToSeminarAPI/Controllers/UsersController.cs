@@ -24,7 +24,7 @@ namespace SignToSeminarAPI.Controllers
 
         // GET: api/Users
         [HttpGet]
-        public IEnumerable<User> Get()
+        public IEnumerable<User> GetAllUsers()
         {
             //Bra? 
             var users = _context.Users.ToArray();
@@ -34,7 +34,7 @@ namespace SignToSeminarAPI.Controllers
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public User Get(int id)
+        public User GetUser(int id)
         {
             var user = _context.Users.Where(u => u.id == id).FirstOrDefault();
             if (user != null)
@@ -47,7 +47,7 @@ namespace SignToSeminarAPI.Controllers
 
         // POST: api/Users
         [HttpPost]
-        public void Post([FromBody] UserViewModel userVM)
+        public void PostUser([FromBody] UserViewModel userVM)
         {
             var user = new User { name = userVM.name, email = userVM.email };
             _context.Users.Add(user);
@@ -57,7 +57,7 @@ namespace SignToSeminarAPI.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void DeleteUser(int id)
         {
             var user = new User { id = id };
             _context.Users.Attach(user);
