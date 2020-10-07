@@ -26,7 +26,7 @@ namespace SignToSeminarAPI.Controllers
 
         // GET: api/Seminars
         [HttpGet]
-        public IEnumerable<Seminar> Get()
+        public IEnumerable<Seminar> GetAllSeminars()
         {
             var seminars = _context.Seminars.ToArray();
             return seminars;
@@ -34,7 +34,7 @@ namespace SignToSeminarAPI.Controllers
 
         // GET: api/Seminars/5
         [HttpGet("{id}")]
-        public Seminar Get(int id)
+        public Seminar GetSeminar(int id)
         {
             var seminar = _context.Seminars.Where(s => s.id == id).FirstOrDefault();
             if (seminar != null)
@@ -49,7 +49,7 @@ namespace SignToSeminarAPI.Controllers
 
         // POST: api/Seminars
         [HttpPost]
-        public void Post([FromBody] SeminarViewModel seminarVM)
+        public void PostSeminar([FromBody] SeminarViewModel seminarVM)
         {
             var seminar = new Seminar { name = seminarVM.name, description = seminarVM.description,
                                         SeminarOfSpeakerId = seminarVM.SeminarOfSpeakerId};
