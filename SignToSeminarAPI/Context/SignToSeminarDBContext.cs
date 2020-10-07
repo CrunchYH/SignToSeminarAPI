@@ -16,6 +16,7 @@ namespace SignToSeminarAPI.Context
         public DbSet<DaySeminar> DaySeminars { set; get; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserSeminar> UserSeminars {get; set; }
+        
 
         public SignToSeminarDBContext(DbContextOptions<SignToSeminarDBContext> options) : base(options)
         {

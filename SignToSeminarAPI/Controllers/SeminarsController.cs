@@ -59,8 +59,35 @@ namespace SignToSeminarAPI.Controllers
 
         // PUT: api/Seminars/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> PutSeminar(int id, Seminar seminar)
         {
+            if (id != seminar.id)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                
+            }
+            _context.Entry(seminar).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!SeminarExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
         // DELETE: api/ApiWithActions/5
@@ -71,6 +98,11 @@ namespace SignToSeminarAPI.Controllers
             _context.Seminars.Attach(seminar);
             _context.Seminars.Remove(seminar);
             _context.SaveChanges();
+        }
+
+        private bool SeminarExists(int id)
+        {
+            return _context.Seminars.Any(e => e.id == id);
         }
     }
 }
