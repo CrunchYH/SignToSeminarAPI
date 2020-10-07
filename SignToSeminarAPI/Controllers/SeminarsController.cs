@@ -51,14 +51,18 @@ namespace SignToSeminarAPI.Controllers
         [HttpPost]
         public void PostSeminar([FromBody] SeminarViewModel seminarVM)
         {
-            var seminar = new Seminar { name = seminarVM.name, description = seminarVM.description,
-                                        SeminarOfSpeakerId = seminarVM.SeminarOfSpeakerId};
+            var seminar = new Seminar
+            {
+                name = seminarVM.name,
+                description = seminarVM.description,
+                SeminarOfSpeakerId = seminarVM.SeminarOfSpeakerId
+            };
             _context.Seminars.Add(seminar);
             _context.SaveChanges();
         }
 
-// PUT: api/Seminars/5
-[HttpPut("{id}")]
+        // PUT: api/Seminars/5
+        [HttpPut("{id}")]
         public async Task<IActionResult> PutSeminar(int id, SeminarViewModel seminarVM)
         {
             var existingSeminar = _context.Seminars.Where(s => s.id == id).FirstOrDefault();

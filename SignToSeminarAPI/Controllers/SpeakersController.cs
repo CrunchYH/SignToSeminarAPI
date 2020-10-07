@@ -68,7 +68,6 @@ namespace SignToSeminarAPI.Controllers
             }
 
             _context.Entry(existingSpeaker).State = EntityState.Modified;
-            _context.SaveChanges();
 
             try
             {
