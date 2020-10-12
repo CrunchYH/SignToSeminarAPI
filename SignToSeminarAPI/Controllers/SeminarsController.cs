@@ -28,15 +28,23 @@ namespace SignToSeminarAPI.Controllers
         [HttpGet]
         public IEnumerable<Seminar> GetAllSeminars()
         {
-            var seminars = _context.Seminars.ToArray();
-            return seminars;
+            var seminars = _context.Seminars.Include(s => s.speaker).ToArray();
+
+            try
+            {
+                return seminars;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         // GET: api/Seminars/5
         [HttpGet("{id}")]
         public Seminar GetSeminar(int id)
         {
-            var seminar = _context.Seminars.Where(s => s.id == id).FirstOrDefault();
+            var seminar = _context.Seminars.Where(s => s.id == id).Include(s => s.speaker).ThenInclude(s => s.seminars).FirstOrDefault();
             if (seminar != null)
             {
                 return seminar;

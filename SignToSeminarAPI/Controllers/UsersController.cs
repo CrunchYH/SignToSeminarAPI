@@ -26,8 +26,8 @@ namespace SignToSeminarAPI.Controllers
         [HttpGet]
         public IEnumerable<User> GetAllUsers()
         {
-            //Bra? 
             var users = _context.Users.ToArray();
+            
             return users;
 
         }

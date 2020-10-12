@@ -99,7 +99,7 @@ namespace SignToSeminarAPI.Controllers
         }
          private bool SpeakerExists(int id)
         {
-            return _context.Speakers.Any(e => e.id == id);
+            return _context.Speakers.Any(s => s.id == id);
         }
     }
 }
