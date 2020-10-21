@@ -28,7 +28,7 @@ namespace SignToSeminarAPI.Controllers
         [HttpGet]
         public IEnumerable<Seminar> GetAllSeminars()
         {
-            var seminars = _context.Seminars.Include(s => s.speaker).ToArray();
+            var seminars = _context.Seminars.ToArray();
 
             try
             {

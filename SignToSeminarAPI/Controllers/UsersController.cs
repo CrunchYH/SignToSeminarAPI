@@ -26,7 +26,7 @@ namespace SignToSeminarAPI.Controllers
         [HttpGet]
         public IEnumerable<User> GetAllUsers()
         {
-            var users = _context.Users.ToArray();
+            var users = _context.Users.Include(u => u.userSeminars).ThenInclude(u => u.seminar).ToArray();
             
             return users;
 
