@@ -13,7 +13,6 @@ namespace SignToSeminarAPI.Context
         public DbSet<Speaker> Speakers { set; get; }
         public DbSet<Seminar> Seminars { set; get; }
         public DbSet<Day> Days { set; get; }
-        public DbSet<DaySeminar> DaySeminars { set; get; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserSeminar> UserSeminars {get; set; }
         
@@ -39,8 +38,11 @@ namespace SignToSeminarAPI.Context
                 .WithMany(s => s.seminars)
                 .HasForeignKey(s => s.SeminarOfSpeakerId);
 
-            // Composite Primary Key for joining the tables Seminar and Day with a many-to-many relationship
-            modelBuilder.Entity<DaySeminar>().HasKey(sc => new { sc.dayId, sc.seminarId });
+            //Configuring the one-to-many relationship between tables Seminar and Day
+            modelBuilder.Entity<Seminar>()
+                .HasOne<Day>(s => s.day )
+                .WithMany(d => d.seminars)
+                .HasForeignKey(d => d.SeminarOfDayId);
 
             // Composite Primary Key for joining the tables User and Seminar with a many-to-many relationship
             modelBuilder.Entity<UserSeminar>().HasKey(sc => new { sc.userId, sc.seminarId });
