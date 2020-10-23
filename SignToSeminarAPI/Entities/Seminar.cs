@@ -19,8 +19,10 @@ namespace SignToSeminarAPI.Entities
         public int SeminarOfSpeakerId { get; set; }
 
         public Speaker speaker { get; set; }
+        
+        public Day day { get; set; }
 
-        public IList<DaySeminar> daySeminars { get; set; }
+        public int SeminarOfDayId { get; set; }
 
         public IList<UserSeminar> userSeminars { get; set; } 
     }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SignToSeminarAPI.Context;
 
 namespace SignToSeminarAPI.Migrations
 {
     [DbContext(typeof(SignToSeminarDBContext))]
-    partial class SignToSeminarDBContextModelSnapshot : ModelSnapshot
+    [Migration("20201023102929_oneDay-to-manySeminars")]
+    partial class oneDaytomanySeminars
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
