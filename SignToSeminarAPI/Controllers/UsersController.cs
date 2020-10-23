@@ -47,11 +47,43 @@ namespace SignToSeminarAPI.Controllers
 
         // POST: api/Users
         [HttpPost]
-        public void PostUser([FromBody] UserViewModel userVM)
+        public string PostUser([FromBody] UserViewModel userVM)
         {
-            var user = new User { name = userVM.name, email = userVM.email };
-            _context.Users.Add(user);
+            var userSeminar = new UserSeminar();
+
+            var seminar = _context.Seminars.Where(s => s.id == userVM.seminarId).FirstOrDefault();
+
+            var message = "Successfully signed up for " + seminar.name +"!" ;
+
+            var existingUser = _context.Users.Where(e => e.email == userVM.email).FirstOrDefault();
+
+            if (existingUser != null)
+            {
+                var existingUserSeminar = _context.UserSeminars.Where(e => e.seminar == seminar && e.user == existingUser).FirstOrDefault();
+                
+                if (existingUserSeminar != null)
+                {
+                    message = "already signed up for " + seminar.name + "!" ;
+                }
+                else
+                {
+                    userSeminar.user = existingUser;
+                    userSeminar.seminar = seminar;
+                    _context.UserSeminars.Add(userSeminar);
+                }
+            }
+            else
+            {
+                var user = new User { name = userVM.name, email = userVM.email, };
+                _context.Users.Add(user);
+
+                userSeminar.user = user;
+                userSeminar.seminar = seminar;
+                _context.UserSeminars.Add(userSeminar);
+            }
+             
             _context.SaveChanges();
+            return message;
         }
 
         // PUT: api/Users/5

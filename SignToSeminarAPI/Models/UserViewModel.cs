@@ -9,5 +9,6 @@ namespace SignToSeminarAPI
     {
         public string name { get; set; }
         public string email { get; set; }
+        public int seminarId { get; set; }
     }
 }
