@@ -44,7 +44,7 @@ namespace SignToSeminarAPI.Controllers
         [HttpGet("{id}")]
         public Seminar GetSeminar(int id)
         {
-            var seminar = _context.Seminars.Where(s => s.id == id).Include(s => s.speaker).ThenInclude(s => s.seminars).FirstOrDefault();
+            var seminar = _context.Seminars.Where(s => s.id == id).Include(s => s.speaker).Include(s => s.day).FirstOrDefault();
             if (seminar != null)
             {
                 return seminar;
@@ -59,11 +59,20 @@ namespace SignToSeminarAPI.Controllers
         [HttpPost]
         public void PostSeminar([FromBody] SeminarViewModel seminarVM)
         {
+            var speaker = new Speaker { name = seminarVM.SpeakersName };
+            _context.Speakers.Add(speaker);
+
+            var stringDate = seminarVM.Date + " " + seminarVM.Time + ":00";   //Need to fix correct format: (1999, 12, 11, 14, 00, 00)
+
+            var dateTimeDate = new Day { day = Convert.ToDateTime(stringDate) };
+            _context.Days.Add(dateTimeDate);
+
             var seminar = new Seminar
             {
                 name = seminarVM.name,
                 description = seminarVM.description,
-                SeminarOfSpeakerId = seminarVM.SeminarOfSpeakerId
+                speaker = speaker,
+                day = dateTimeDate
             };
             _context.Seminars.Add(seminar);
             _context.SaveChanges();
