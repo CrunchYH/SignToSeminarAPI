@@ -47,7 +47,7 @@ namespace SignToSeminarAPI.Controllers
 
         // POST: api/Users
         [HttpPost]
-        public string PostUser([FromBody] UserViewModel userVM)
+        public ActionResult<Object> PostUser([FromBody] UserViewModel userVM)
         {
             var userSeminar = new UserSeminar();
 
@@ -57,20 +57,12 @@ namespace SignToSeminarAPI.Controllers
 
             var existingUser = _context.Users.Where(e => e.email == userVM.email).FirstOrDefault();
 
+
             if (existingUser != null)
             {
-                var existingUserSeminar = _context.UserSeminars.Where(e => e.seminar == seminar && e.user == existingUser).FirstOrDefault();
-                
-                if (existingUserSeminar != null)
-                {
-                    message = "already signed up for " + seminar.name + "!" ;
-                }
-                else
-                {
                     userSeminar.user = existingUser;
                     userSeminar.seminar = seminar;
                     _context.UserSeminars.Add(userSeminar);
-                }
             }
             else
             {
@@ -81,9 +73,16 @@ namespace SignToSeminarAPI.Controllers
                 userSeminar.seminar = seminar;
                 _context.UserSeminars.Add(userSeminar);
             }
-             
-            _context.SaveChanges();
-            return message;
+
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            return Ok(new { message });
         }
 
         // PUT: api/Users/5

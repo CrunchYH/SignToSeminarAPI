@@ -28,7 +28,7 @@ namespace SignToSeminarAPI.Controllers
         [HttpGet]
         public IEnumerable<Seminar> GetAllSeminars()
         {
-            var seminars = _context.Seminars.ToArray();
+            var seminars = _context.Seminars.Include(s => s.day).ToArray();
 
             try
             {
@@ -62,7 +62,7 @@ namespace SignToSeminarAPI.Controllers
             var speaker = new Speaker { name = seminarVM.SpeakersName };
             _context.Speakers.Add(speaker);
 
-            var stringDate = seminarVM.Date + " " + seminarVM.Time + ":00";   //Need to fix correct format: (1999, 12, 11, 14, 00, 00)
+            var stringDate = seminarVM.Date + " " + seminarVM.Time + ":00";
 
             var dateTimeDate = new Day { day = Convert.ToDateTime(stringDate) };
             _context.Days.Add(dateTimeDate);
