@@ -57,8 +57,9 @@ namespace SignToSeminarAPI.Controllers
 
         // POST: api/Seminars
         [HttpPost]
-        public void PostSeminar([FromBody] SeminarViewModel seminarVM)
+        public ActionResult<object> PostSeminar([FromBody] SeminarViewModel seminarVM)
         {
+            var message = "New seminar " + "'" + seminarVM.name + "' added to list.";  
             var speaker = new Speaker { name = seminarVM.SpeakersName };
             _context.Speakers.Add(speaker);
 
@@ -75,7 +76,17 @@ namespace SignToSeminarAPI.Controllers
                 day = dateTimeDate
             };
             _context.Seminars.Add(seminar);
-            _context.SaveChanges();
+
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+                message = "Seminar not saved, try again.";
+                return (new { message });
+            }
+            return Ok(new { message });
         }
 
         // PUT: api/Seminars/5

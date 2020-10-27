@@ -47,7 +47,7 @@ namespace SignToSeminarAPI.Controllers
 
         // POST: api/Users
         [HttpPost]
-        public ActionResult<Object> PostUser([FromBody] UserViewModel userVM)
+        public ActionResult<object> PostUser([FromBody] UserViewModel userVM)
         {
             var userSeminar = new UserSeminar();
 
