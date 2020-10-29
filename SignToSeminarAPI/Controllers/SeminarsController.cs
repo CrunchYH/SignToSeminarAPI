@@ -60,11 +60,11 @@ namespace SignToSeminarAPI.Controllers
         public ActionResult<object> PostSeminar([FromBody] SeminarViewModel seminarVM)
         {
             var message = "New seminar " + "'" + seminarVM.name + "' added to list.";  
+            
             var speaker = new Speaker { name = seminarVM.SpeakersName };
             _context.Speakers.Add(speaker);
 
             var stringDate = seminarVM.Date + " " + seminarVM.Time + ":00";
-
             var dateTimeDate = new Day { day = Convert.ToDateTime(stringDate) };
             _context.Days.Add(dateTimeDate);
 
@@ -93,13 +93,26 @@ namespace SignToSeminarAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutSeminar(int id, SeminarViewModel seminarVM)
         {
+            var message = "Updated " + seminarVM.name + " successfully!";
+            var stringDate = seminarVM.Date + " " + seminarVM.Time + ":00";
+            var dateTimeDate = new Day { day = Convert.ToDateTime(stringDate) };
+            
+            var speaker = new Speaker();
+            var existingSpeaker = _context.Speakers.Where(s => s.name == seminarVM.SpeakersName).FirstOrDefault();
             var existingSeminar = _context.Seminars.Where(s => s.id == id).FirstOrDefault();
+
+            if (existingSpeaker == null)
+            {
+                speaker.name = seminarVM.SpeakersName;
+                _context.Speakers.Add(speaker);
+            }
 
             if (existingSeminar != null)
             {
                 existingSeminar.name = seminarVM.name;
-                existingSeminar.SeminarOfSpeakerId = seminarVM.SeminarOfSpeakerId;
                 existingSeminar.description = seminarVM.description;
+                existingSeminar.speaker = speaker;
+                existingSeminar.day = dateTimeDate;
             }
             else
             {
@@ -128,12 +141,24 @@ namespace SignToSeminarAPI.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult<object> Delete(int id)
         {
+            var message = "Seminar deleted!";
+
             var seminar = new Seminar { id = id };
             _context.Seminars.Attach(seminar);
             _context.Seminars.Remove(seminar);
-            _context.SaveChanges();
+
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return Ok(new { message });
         }
 
         private bool SeminarExists(int id)
