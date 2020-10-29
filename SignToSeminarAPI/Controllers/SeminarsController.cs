@@ -91,11 +91,11 @@ namespace SignToSeminarAPI.Controllers
 
         // PUT: api/Seminars/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSeminar(int id, SeminarViewModel seminarVM)
+        public ActionResult<object> PutSeminar(int id, SeminarViewModel seminarVM)
         {
             var message = "Updated " + seminarVM.name + " successfully!";
             var stringDate = seminarVM.Date + " " + seminarVM.Time + ":00";
-            var dateTimeDate = new Day { day = Convert.ToDateTime(stringDate) };
+            var day = new Day { day = Convert.ToDateTime(stringDate)};
             
             var speaker = new Speaker();
             var existingSpeaker = _context.Speakers.Where(s => s.name == seminarVM.SpeakersName).FirstOrDefault();
@@ -106,13 +106,17 @@ namespace SignToSeminarAPI.Controllers
                 speaker.name = seminarVM.SpeakersName;
                 _context.Speakers.Add(speaker);
             }
+            else
+            {
+                speaker = existingSpeaker;
+            }
 
             if (existingSeminar != null)
             {
                 existingSeminar.name = seminarVM.name;
                 existingSeminar.description = seminarVM.description;
                 existingSeminar.speaker = speaker;
-                existingSeminar.day = dateTimeDate;
+                existingSeminar.day = day;
             }
             else
             {
@@ -122,7 +126,7 @@ namespace SignToSeminarAPI.Controllers
 
             try
             {
-                await _context.SaveChangesAsync();
+                _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -136,7 +140,7 @@ namespace SignToSeminarAPI.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok( new { message });
         }
 
         // DELETE: api/ApiWithActions/5
