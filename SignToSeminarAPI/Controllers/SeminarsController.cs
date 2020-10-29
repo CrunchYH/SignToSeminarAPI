@@ -59,7 +59,7 @@ namespace SignToSeminarAPI.Controllers
         [HttpPost]
         public ActionResult<object> PostSeminar([FromBody] SeminarViewModel seminarVM)
         {
-            var message = "New seminar " + "'" + seminarVM.name + "' added to list.";  
+            var message = "New seminar added to list!";  
             
             var speaker = new Speaker { name = seminarVM.SpeakersName };
             _context.Speakers.Add(speaker);
